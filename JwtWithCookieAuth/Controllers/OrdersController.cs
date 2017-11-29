@@ -28,7 +28,6 @@ namespace JwtWithCookieAuth.Controllers
         {
             _dataAccess = new DataAccess();
         }
-
         // GET api/orders
         [HttpGet]
         public IActionResult Get()
@@ -133,9 +132,10 @@ namespace JwtWithCookieAuth.Controllers
 
         // DELETE api/orders/59c44d7f06333b978cb7ef69
         [HttpDelete("{id:length(24)}")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(string id, [FromHeader]String authorization)
         {
-            await _dataAccess.Remove(id);
+            var emailFromJwt = GetValueFromJwtPayload(authorization);
+            await _dataAccess.Remove(id, emailFromJwt);
             return new OkResult();
         }
 

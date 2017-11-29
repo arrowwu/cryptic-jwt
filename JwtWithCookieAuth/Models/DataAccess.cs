@@ -107,10 +107,11 @@ namespace JwtWithCookieAuth.Models
             await collection.FindOneAndReplaceAsync(filter, order);
             
         }
-        public async Task Remove(String id)
+        public async Task Remove(String id, String emailFromJwt)
         {
             var collection = _db.GetCollection<Order>("orders");
             var filter = Builders<Order>.Filter.Eq(s => s.Id, id);
+            filter = filter & Builders<Order>.Filter.Eq(s => s.Owner.Email, emailFromJwt);
             await collection.DeleteOneAsync(filter);
 
         }
